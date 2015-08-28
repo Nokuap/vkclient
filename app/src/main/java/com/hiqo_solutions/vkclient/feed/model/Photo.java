@@ -1,4 +1,4 @@
-package com.hiqo_solutions.vkclient.feed;
+package com.hiqo_solutions.vkclient.feed.model;
 
 /**
  * Created by dmitry.zheltko on 8/11/2015.

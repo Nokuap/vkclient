@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.hiqo_solutions.vkclient.feed.FeedActivity;
 import com.hiqo_solutions.vkclient.utils.Prefs;
 import com.orhanobut.hawk.Hawk;
 

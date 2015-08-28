@@ -1,4 +1,4 @@
-package com.hiqo_solutions.vkclient;
+package com.hiqo_solutions.vkclient.feed;
 
 import android.os.Bundle;
 import android.support.design.widget.*;
@@ -10,7 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 
-import com.hiqo_solutions.vkclient.feed.NewsAdapter;
+import com.hiqo_solutions.vkclient.R;
+import com.hiqo_solutions.vkclient.feed.model.NewsAdapter;
+import com.hiqo_solutions.vkclient.feed.model.Response;
 import com.hiqo_solutions.vkclient.rest.Rest;
 import com.hiqo_solutions.vkclient.utils.Prefs;
 import com.hiqo_solutions.vkclient.utils.Utils;
@@ -18,9 +20,11 @@ import com.orhanobut.hawk.Hawk;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+@SuppressWarnings("ConstantConditions")
 public class FeedActivity extends AppCompatActivity {
 
     @Bind(R.id.recycler_view) RecyclerView recyclerView;
@@ -31,6 +35,7 @@ public class FeedActivity extends AppCompatActivity {
     @Bind(R.id.navigation) NavigationView navigation;
     @Bind(R.id.drawer) DrawerLayout drawer;
     @Bind(R.id.refresher) SwipeRefreshLayout refresher;
+
     private NewsAdapter newsAdapter;
     LinearLayoutManager layoutManager;
 
@@ -45,6 +50,12 @@ public class FeedActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
+        initRecycler();
+        uploadNews();
+        refresher.setOnRefreshListener(this::updateNews);
+    }
+
+    private void initRecycler() {
         newsAdapter = new NewsAdapter();
         recyclerView.setAdapter(newsAdapter);
         layoutManager = new LinearLayoutManager(this);
@@ -53,7 +64,6 @@ public class FeedActivity extends AppCompatActivity {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
@@ -64,8 +74,6 @@ public class FeedActivity extends AppCompatActivity {
 
             }
         });
-        uploadNews();
-        refresher.setOnRefreshListener(this::updateNews);
     }
 
     private void updateNews() {
@@ -83,14 +91,12 @@ public class FeedActivity extends AppCompatActivity {
     private void uploadNews() {
         refresher.setRefreshing(true);
         lastLoadTime = System.currentTimeMillis();
-        Rest.getInstance().getService().newsFirst(Hawk.get(Prefs.TOKEN), "post", 1, 10, 5l, "5.36")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    newsAdapter.addNews(response.getNews(), NewsAdapter.START);
-                    Hawk.put(Prefs.LOAD_FROM, response.getNews().getNextFrom());
-                    refresher.setRefreshing(false);
-                }, this::handleError);
+        Observable<Response> uploadNews = ObserverHandler.getUploadNews();
+        uploadNews.subscribe(response -> {
+            newsAdapter.addNews(response.getNews(), NewsAdapter.START);
+            Hawk.put(Prefs.LOAD_FROM, response.getNews().getNextFrom());
+            refresher.setRefreshing(false);
+        }, this::handleError);
     }
 
     private void uploadMoreNews() {
@@ -116,4 +122,30 @@ public class FeedActivity extends AppCompatActivity {
         error.printStackTrace();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ObserverHandler.unbind();
+    }
+
+    static final class ObserverHandler {
+        private static rx.Observable<Response> uploadNews;
+
+        public static rx.Observable<Response> getUploadNews() {
+            if (uploadNews == null) {
+                uploadNews = Rest.getInstance().getService().newsFirst(Hawk.get(Prefs.TOKEN), "post", 1, 10, 100l, "5.36")
+                        .subscribeOn(Schedulers.newThread())
+                        .cache()
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+            return uploadNews;
+        }
+
+        public static void unbind() {
+            if (uploadNews != null) {
+                Utils.log();
+                uploadNews.unsubscribeOn(AndroidSchedulers.mainThread());
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.hiqo_solutions.vkclient.feed.attachments;
+package com.hiqo_solutions.vkclient.feed.model.attachments;
 
 /**
  * Created by dmitry.zheltko on 8/7/2015.

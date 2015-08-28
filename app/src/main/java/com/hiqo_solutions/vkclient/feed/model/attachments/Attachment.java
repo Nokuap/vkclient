@@ -1,4 +1,4 @@
-package com.hiqo_solutions.vkclient.feed.attachments;
+package com.hiqo_solutions.vkclient.feed.model.attachments;
 
 import com.google.gson.annotations.SerializedName;
 

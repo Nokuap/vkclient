@@ -1,6 +1,6 @@
 package com.hiqo_solutions.vkclient.rest;
 
-import com.hiqo_solutions.vkclient.feed.Response;
+import com.hiqo_solutions.vkclient.feed.model.Response;
 
 import retrofit.http.GET;
 import retrofit.http.Query;

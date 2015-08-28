@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.hiqo_solutions.vkclient.feed.FeedActivity;
 import com.hiqo_solutions.vkclient.utils.Prefs;
 import com.orhanobut.hawk.Hawk;
 

@@ -1,4 +1,4 @@
-package com.hiqo_solutions.vkclient.feed;
+package com.hiqo_solutions.vkclient.feed.model;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hiqo_solutions.vkclient.App;
 import com.hiqo_solutions.vkclient.R;
-import com.hiqo_solutions.vkclient.feed.attachments.AttachedPhoto;
-import com.hiqo_solutions.vkclient.feed.attachments.Attachment;
-import com.hiqo_solutions.vkclient.feed.attachments.Video;
+import com.hiqo_solutions.vkclient.feed.model.attachments.AttachedPhoto;
+import com.hiqo_solutions.vkclient.feed.model.attachments.Attachment;
+import com.hiqo_solutions.vkclient.feed.model.attachments.Video;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

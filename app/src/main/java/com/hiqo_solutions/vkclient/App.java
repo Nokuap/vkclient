@@ -3,10 +3,14 @@ package com.hiqo_solutions.vkclient;
 import android.app.Application;
 import android.content.Context;
 
+import com.hiqo_solutions.vkclient.utils.Utils;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
 import com.orhanobut.hawk.LogLevel;
 
+import java.util.ArrayList;
+
+import rx.Observable;
 import timber.log.Timber;
 
 /**

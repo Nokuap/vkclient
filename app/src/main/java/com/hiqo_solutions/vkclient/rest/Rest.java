@@ -1,7 +1,7 @@
 package com.hiqo_solutions.vkclient.rest;
 
 import com.google.gson.*;
-import com.hiqo_solutions.vkclient.feed.attachments.*;
+import com.hiqo_solutions.vkclient.feed.model.attachments.*;
 
 import retrofit.RestAdapter;
 import retrofit.converter.Converter;

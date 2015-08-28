@@ -1,6 +1,6 @@
-package com.hiqo_solutions.vkclient.feed;
+package com.hiqo_solutions.vkclient.feed.model;
 
-import com.hiqo_solutions.vkclient.feed.attachments.Attachment;
+import com.hiqo_solutions.vkclient.feed.model.attachments.Attachment;
 
 import java.util.List;
 

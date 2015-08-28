@@ -1,4 +1,4 @@
-package com.hiqo_solutions.vkclient.feed;
+package com.hiqo_solutions.vkclient.feed.model;
 
 import java.util.List;
 
